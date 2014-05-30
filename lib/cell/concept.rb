@@ -23,6 +23,14 @@ class Cell::Concept < Cell::ViewModel
   self_contained!
 
   # DISCUSS: experimental, allows to render layouts from the partial view directory instead of a global one.
+  extend Uber::InheritableAttr
+  inheritable_attr :layout_options
+  self.layout_options = nil
+  def self.layout(name) # override Rails' layout weirdness.
+    layout_options = name
+  end
+
+
   module Rendering
     def view_renderer
       @_view_renderer ||= Renderer.new(lookup_context)
@@ -40,6 +48,14 @@ class Cell::Concept < Cell::ViewModel
           options[:layout].sub!("layouts/", "")
         end
       end
+    end
+
+    def options_for(options, caller)
+      options = super
+      options[:layout] = false unless options[:view] == "show" and self.class.layout_options
+      puts options[:view].inspect
+      options[:layout] = self.class.layout_options if options[:view] == "show" and self.class.layout_options
+      options
     end
   end
 

@@ -27,9 +27,17 @@ if Cell.rails_version >= 3.1
       class Track < ::Cell::Concept
         inherit_views Song
 
-        layout "layout"
+        layout "layout" # only for :show
         def show
           render :song
+        end
+
+        def set
+          render :set # renders ieaiaio
+        end
+
+        def ieaiaio
+          render :ieaiaio
         end
       end
     end
@@ -68,11 +76,14 @@ if Cell.rails_version >= 3.1
     end
 
 
+    # TODO: move layout tests to VM in 4.0.
     describe "#render with :layout" do
       it { Cell::Concept.cell("record/cell/song", @controller).show_with_layout.must_equal "<p>\nLalala\n</p>\n" }
     end
     describe "#render with ::layout" do
       it { Cell::Concept.cell("record/cell/track", @controller).show.must_equal "<p>\nLalala\n</p>\n" }
+      # with nested render that shouldn't do layout
+      it { Cell::Concept.cell("record/cell/track", @controller).set.must_equal "<p>Setlist: I-E-A-I-A-I-O</p>" }
     end
     describe "#render" do
       it { Cell::Concept.cell("record/cell/song", @controller).show.must_equal "Lalala" }
