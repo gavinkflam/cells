@@ -4,9 +4,23 @@ module Cell
     include ActionController::RequestForgeryProtection
 
     abstract!
-    # delegate :session, :params, :request, :config, :env, :url_options, :to => :parent_controller
+
+    # FIXME: session: request_forgery_protection.rb:101:in `form_authenticity_token'
+     #, :request, :config, :env, :url_options
+    delegate :session, :params, :to => :controller
     def controller
-      self
+
+      # TODO: introduce Metal::Dependency object
+      Object.new.instance_eval do
+        def params
+          {}
+        end
+
+        def session
+          {}
+        end
+        self
+      end
     end
 
     class Builder < Cell::Builder
