@@ -57,9 +57,9 @@ class RailsCellsTest < MiniTest::Spec
       end
     end
 
-    it "respond to #request" do
-      assert_equal @request, cell(:bassist).request
-    end
+    # it "respond to #request" do
+    #   assert_equal @request, cell(:bassist).request
+    # end
 
     it "respond to #config" do
       assert_equal({}, cell(:bassist).config)
@@ -101,19 +101,19 @@ class RailsCellsTest < MiniTest::Spec
         end
       end
 
-      it "respond to session" do
-        session_kind = Hash
-        session_kind = ActionController::TestSession if Cell.rails_version >= ("4.0")
-        assert_kind_of session_kind, @cell.session
-      end
+      # it "respond to session" do
+      #   session_kind = Hash
+      #   session_kind = ActionController::TestSession if Cell.rails_version >= ("4.0")
+      #   assert_kind_of session_kind, @cell.session
+      # end
 
-      it "respond to #params and return the request parameters" do
-        assert_equal({"song" => "Creatures"}, cell(:bassist).params)
-      end
+      # it "respond to #params and return the request parameters" do
+      #   assert_equal({"song" => "Creatures"}, cell(:bassist).params)
+      # end
 
-      it "not merge #params and #options" do
-        assert_equal({"song" => "Creatures"}, cell(:bassist, "song" => "Lockdown").params)
-      end
+      # it "not merge #params and #options" do
+      #   assert_equal({"song" => "Creatures"}, cell(:bassist, "song" => "Lockdown").params)
+      # end
     end
   end
 end

@@ -1,15 +1,16 @@
-require 'cell/rack'
-
 module Cell
-  class Rails < Rack
+  class Rails < Base
     # When this file is included we can savely assume that a rails environment with caching, etc. is available.
     include ActionController::RequestForgeryProtection
 
     abstract!
-    delegate :session, :params, :request, :config, :env, :url_options, :to => :parent_controller
+    # delegate :session, :params, :request, :config, :env, :url_options, :to => :parent_controller
+    def controller
+      self
+    end
 
     class Builder < Cell::Builder
-      def run_builder_block(block, controller, *args)
+      def run_builder_block(block, *args)
         super(block, *args)
       end
     end
@@ -28,20 +29,12 @@ module Cell
 
       # Main entry point for instantiating cells.
 
-      def cell_for(name, controller, *args)
+      def cell_for(name, *args)
         # FIXME: too much redundancy from Base.
-        Builder.new(class_from_cell_name(name), controller).call(controller, *args) # use Cell::Rails::Builder.
+        Builder.new(class_from_cell_name(name), nil).call(*args) # use Cell::Rails::Builder.
       end
     end
 
-
-    attr_reader :parent_controller
-    alias_method :controller, :parent_controller
-
-    def initialize(parent_controller, *args)
-      super(parent_controller, *args) # FIXME: huh?
-      @parent_controller = parent_controller
-    end
 
     def cache_configured?
       ActionController::Base.send(:cache_configured?) # DISCUSS: why is it private?
@@ -54,11 +47,9 @@ module Cell
     module DSL
       def cell(name, *args)
         # TODO: this method should be an instance method everywhere.
-        Base.cell_for(name, parent_controller, *args)
+        Base.cell_for(name, *args)
       end
     end
     include DSL
   end
 end
-
-require "cell/rails/view_model" # TODO: remove in 4.0.

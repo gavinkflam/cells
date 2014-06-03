@@ -13,8 +13,8 @@ module Cells
 end
 
 require 'cell'
+require 'cell/base'
 require 'cell/rails'
 require 'cells/rails'
-require 'cell/deprecations'
 require 'cells/engines'
 require 'cells/railtie'

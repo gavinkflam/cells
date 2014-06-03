@@ -1,3 +1,7 @@
+## 4.0.0
+
+* No `controller` in cell instances anymore (per default). If you used to include helpers to call helpers in cell instance methods, convert to `Cell::ViewModel`.
+
 ## 3.11.1
 
 * Override `ActionView::Helpers::UrlHelper#url_for` in Rails 4.x as it is troublesome. That removes the annoying

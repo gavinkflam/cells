@@ -20,18 +20,18 @@ class Cell::ViewModel < Cell::Rails
 
   module Helpers
     # DISCUSS: highest level API method. add #cell here.
-    def collection(name, controller, array, method=:show)
+    def collection(name, array, method=:show)
       # FIXME: this is the problem in Concept cells, we don't wanna call Cell::Rails.cell_for here.
-      array.collect { |model| cell_for(name, controller, model).call(method) }.join("\n").html_safe
+      array.collect { |model| cell_for(name, model).call(method) }.join("\n").html_safe
     end
 
     # TODO: this should be in Helper or something. this should be the only entry point from controller/view.
-    def cell(name, controller, *args, &block) # classic Rails fuzzy API.
+    def cell(name, *args, &block) # classic Rails fuzzy API.
       if args.first.is_a?(Hash) and array = args.first[:collection]
-        return collection(name, controller, array)
+        return collection(name, array)
       end
 
-      cell_for(name, controller, *args, &block)
+      cell_for(name, *args, &block)
     end
   end
   extend Helpers # FIXME: do we really need ViewModel::cell/::collection ?
@@ -46,7 +46,7 @@ class Cell::ViewModel < Cell::Rails
   end
 
   def cell(name, *args)
-    self.class.cell(name, parent_controller, *args)
+    self.class.cell(name, *args)
   end
 
 

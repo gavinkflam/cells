@@ -64,7 +64,7 @@ if Cell.rails_version >= 3.1
 
   class ViewModelTest < MiniTest::Spec
     # views :show, :create #=> wrap in render_state(:show, *)
-    let (:cell) { SongCell.new(nil, :title => "Shades Of Truth") }
+    let (:cell) { SongCell.new(:title => "Shades Of Truth") }
 
     it { cell.title.must_equal "Shades Of Truth" }
 
@@ -84,12 +84,12 @@ if Cell.rails_version >= 3.1
     end
 
     let (:song) { Song.new(:title => "65", artist: "Boss") }
-    it { HitCell.new(nil, song).title.must_equal "65" }
-    it { HitCell.new(nil, song).artist.must_equal "Boss" }
+    it { HitCell.new(song).title.must_equal "65" }
+    it { HitCell.new(song).artist.must_equal "Boss" }
 
 
     describe "#call" do
-      let (:cell) { HitCell.new(nil, song) }
+      let (:cell) { HitCell.new(song) }
 
       it { cell.call.must_equal "Great!" }
       it { cell.call(:rate).must_equal "Fantastic!" }
@@ -136,7 +136,7 @@ if Cell.rails_version >= 3.1
       #let (:cell) {  }
 
       setup do
-        @cell = SongCell.new(@controller, :song => Song.new(:title => "Blindfold", :id => "1"))
+        @cell = SongCell.new(:song => Song.new(:title => "Blindfold", :id => "1"))
 
         @url = "/songs/1"
         @url = "http://test.host/songs/1" if Cell.rails_version.>=("4.0")
@@ -145,7 +145,7 @@ if Cell.rails_version >= 3.1
 
       # test "instantiating without model, but call to ::property" do
       #   assert_raises do
-      #     @controller.cell("view_model_test/piano_song")
+      #     ell("view_model_test/piano_song")
       #   end
       # end
 
@@ -161,11 +161,11 @@ if Cell.rails_version >= 3.1
 
       test "implicit #render" do
         @cell.details.must_equal "<h3>BLINDFOLD</h3>\n"
-        SongCell.new(@controller, :song => Song.new(:title => "Blindfold", :id => 1)).details
+        SongCell.new(:song => Song.new(:title => "Blindfold", :id => 1)).details
       end
 
       test "explicit #render with one arg" do
-        @cell = SongCell.new(@controller, :song => Song.new(:title => "Blindfold", :id => 1))
+        @cell = SongCell.new(:song => Song.new(:title => "Blindfold", :id => 1))
         @cell.stats.must_equal "<h3>BLINDFOLD</h3>\n"
       end
 
@@ -196,13 +196,13 @@ if Cell.rails_version >= 3.1
 
 
     describe "::collection" do
-      it { Cell::ViewModel.collection("collection_test/release_party", @controller, %w{Garth Wayne}).must_equal "Party on, Garth!\nParty on, Wayne!" }
-      it { Cell::ViewModel.collection("collection_test/release_party", @controller, %w{Garth Wayne}, :show_more).must_equal "Go nuts, Garth!\nGo nuts, Wayne!" }
+      it { Cell::ViewModel.collection("collection_test/release_party", %w{Garth Wayne}).must_equal "Party on, Garth!\nParty on, Wayne!" }
+      it { Cell::ViewModel.collection("collection_test/release_party", %w{Garth Wayne}, :show_more).must_equal "Go nuts, Garth!\nGo nuts, Wayne!" }
     end
     # TODO: test with builders ("polymorphic collections") and document that.
 
     describe "::cell" do
-      it { Cell::ViewModel.cell("collection_test/release_party", @controller, "Garth").call.must_equal "Party on, Garth!" }
+      it { Cell::ViewModel.cell("collection_test/release_party", "Garth").call.must_equal "Party on, Garth!" }
     end
   end
 

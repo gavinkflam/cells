@@ -49,37 +49,37 @@ if Cell.rails_version >= 3.1
 
 
     describe "::controller_path" do
-      it { Record::Cell.new(@controller).controller_path.must_equal "record" }
-      it { Record::Cell::Song.new(@controller).controller_path.must_equal "record/song" }
+      it { Record::Cell.new.controller_path.must_equal "record" }
+      it { Record::Cell::Song.new.controller_path.must_equal "record/song" }
     end
 
 
     describe "#_prefixes" do
-      it { Record::Cell.new(@controller)._prefixes.must_equal       ["record/views"] }
-      it { Record::Cell::Song.new(@controller)._prefixes.must_equal ["record/song/views", "record/views"] }
-      it { Record::Cell::Hit.new(@controller)._prefixes.must_equal  ["record/hit/views", "record/views"]  } # with inherit_views.
+      it { Record::Cell.new._prefixes.must_equal       ["record/views"] }
+      it { Record::Cell::Song.new._prefixes.must_equal ["record/song/views", "record/views"] }
+      it { Record::Cell::Hit.new._prefixes.must_equal  ["record/hit/views", "record/views"]  } # with inherit_views.
     end
 
     unless ::Cell.rails_version.~("3.0")
-      it { Record::Cell.new(@controller, "Wayne").render_state(:show).must_equal "Party on, Wayne!" }
+      it { Record::Cell.new( "Wayne").render_state(:show).must_equal "Party on, Wayne!" }
     end
 
 
     describe "#cell" do
-      it { Cell::Concept.cell("record/cell", @controller).must_be_instance_of(      Record::Cell) }
-      it { Cell::Concept.cell("record/cell/song", @controller).must_be_instance_of  Record::Cell::Song }
+      it { Cell::Concept.cell("record/cell").must_be_instance_of(      Record::Cell) }
+      it { Cell::Concept.cell("record/cell/song").must_be_instance_of  Record::Cell::Song }
       # cell("song", concept: "record/compilation") # record/compilation/cell/song
     end
 
 
     describe "#render with :layout" do
-      it { Cell::Concept.cell("record/cell/song", @controller).show_with_layout.must_equal "<p>\nLalala\n</p>\n" }
+      it { Cell::Concept.cell("record/cell/song").show_with_layout.must_equal "<p>\nLalala\n</p>\n" }
     end
     describe "#render with ::layout" do
-      it { Cell::Concept.cell("record/cell/track", @controller).show.must_equal "<p>\nLalala\n</p>\n" }
+      it { Cell::Concept.cell("record/cell/track").show.must_equal "<p>\nLalala\n</p>\n" }
     end
     describe "#render" do
-      it { Cell::Concept.cell("record/cell/song", @controller).show.must_equal "Lalala" }
+      it { Cell::Concept.cell("record/cell/song").show.must_equal "Lalala" }
     end
 
 

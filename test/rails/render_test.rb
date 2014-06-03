@@ -169,21 +169,21 @@ class RailsRenderTest < MiniTest::Spec
     end
   end
 
-  describe "A cell view" do
-    # rails view api
-    it "allow calls to params/response/..." do
-      BassistCell.class_eval do
-        def pose; render; end
-      end
+  # describe "A cell view" do
+  #   # rails view api
+  #   it "allow calls to params/response/..." do
+  #     BassistCell.class_eval do
+  #       def pose; render; end
+  #     end
 
-      @request.env["action_dispatch.request.request_parameters"] = {:what => 'get'} # FIXME: duplicated in cells_test.rb.
-      @controller = Class.new(ActionController::Base).new
-      @controller.request = @request
-      @cell = cell(:bassist)
+  #     @request.env["action_dispatch.request.request_parameters"] = {:what => 'get'} # FIXME: duplicated in cells_test.rb.
+  #     @controller = Class.new(ActionController::Base).new
+  #     @controller.request = @request
+  #     @cell = cell(:bassist)
 
-      assert_equal "Come and get me!", @cell.render_state(:pose)
-    end
+  #     assert_equal "Come and get me!", @cell.render_state(:pose)
+  #   end
 
 
-  end
+  # end
 end

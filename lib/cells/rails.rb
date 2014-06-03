@@ -4,13 +4,13 @@ module Cells
   module Rails
     module ActionController
       def cell_for(name, *args, &block)
-        return Cell::Rails::ViewModel.cell(name, self, *args, &block) if args.first.is_a?(Hash) and args.first[:collection] # FIXME: we only want this feature in view models for now.
-        ::Cell::Base.cell_for(name, self, *args, &block)
+        return Cell::ViewModel.cell(name, self, *args, &block) if args.first.is_a?(Hash) and args.first[:collection] # FIXME: we only want this feature in view models for now.
+        ::Cell::Base.cell_for(name, *args, &block)
       end
       alias_method :cell, :cell_for # DISCUSS: make this configurable?
 
       def concept_for(name, *args, &block)
-        return Cell::Concept.cell(name, self, *args, &block)
+        return Cell::Concept.cell(name, *args, &block)
       end
       alias_method :concept, :concept_for
 
@@ -29,7 +29,7 @@ module Cells
       #     cell.markdown! if config.parse_comments?
       #   end
       def render_cell(name, state, *args, &block)
-        ::Cell::Rails.render_cell_for(name, state, self, *args, &block)
+        ::Cell::Rails.render_cell_for(name, state, *args, &block)
       end
 
       # Expires the cached cell state view, similar to ActionController::expire_fragment.
@@ -65,7 +65,7 @@ module Cells
 
       # See Cells::Rails::ActionController#render_cell.
       def render_cell(name, state, *args, &block)
-        ::Cell::Rails.render_cell_for(name, state, controller, *args, &block)
+        ::Cell::Rails.render_cell_for(name, state, *args, &block)
       end
 
       def concept(name, *args, &block)

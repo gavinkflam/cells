@@ -21,9 +21,10 @@ class FormsTest < MiniTest::Spec
     html.must_match Regexp.new("<form.+[name].+<\/form>", Regexp::MULTILINE)
   end
 
-  class SongFormCell < BassistCell
-    include ViewModel
+  class SongFormCell < Cell::ViewModel
     include ActionView::Helpers::FormHelper
+
+    inherit_views BassistCell
 
     def form
       render :view => :form_for
@@ -41,16 +42,17 @@ class FormsTest < MiniTest::Spec
   it "renders input fields within the form tag with ERB and ViewModel" do
     skip if ::Cell.rails_version.~("3.0")
 
-    html = SongFormCell.new(@controller).form
+    html = SongFormCell.new.form
     puts html.to_s
 
     html.must_match Regexp.new("<form.+<input id=\"forms_test_song_name\".+<\/form>", Regexp::MULTILINE)
   end
 
 
-  class HamlSongFormCell < BassistCell
-    include ViewModel
+  class HamlSongFormCell < Cell::ViewModel
     include ActionView::Helpers::FormHelper
+
+    inherit_views BassistCell
 
     def form
       render :view => :form_for_in_haml

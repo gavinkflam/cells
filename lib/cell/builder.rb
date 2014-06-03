@@ -6,7 +6,7 @@ module Cell
   # * only dependency: constant.builders (I wanted to hide this from Cell::Base)
   # * can easily be replaced or removed.
   class Builder
-    def initialize(constant, exec_context) # TODO: evaluate usage of builders and implement using Uber::Options::Value.
+    def initialize(constant, exec_context=nil) # TODO: evaluate usage of builders and implement using Uber::Options::Value.
       @constant     = constant
       @exec_context = exec_context
       @builders     = @constant.builders # only dependency, must be a Cell::Base subclass.

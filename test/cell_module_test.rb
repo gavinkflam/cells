@@ -46,12 +46,12 @@ class CellModuleTest < MiniTest::Spec
     # FUNCTIONAL:
     describe "render_cell_for" do
       it "render the actual cell" do
-        assert_equal "Doo", Cell::Rails.render_cell_for(:bassist, :play, @controller)
+        assert_equal "Doo", Cell::Rails.render_cell_for(:bassist, :play)
       end
 
       it "accept a block, passing the cell instance" do
         flag = false
-        html = Cell::Rails.render_cell_for(:bassist, :play, @controller) do |cell|
+        html = Cell::Rails.render_cell_for(:bassist, :play) do |cell|
           assert_equal BassistCell, cell.class
           flag = true
         end
@@ -69,7 +69,7 @@ class CellModuleTest < MiniTest::Spec
           end
         end
 
-        assert_instance_of BassistCell, Cell::Rails.cell_for("cell_module_test/drummer", :play, @controller)
+        assert_instance_of BassistCell, Cell::Rails.cell_for("cell_module_test/drummer", :play)
       end
     end
 
@@ -95,13 +95,13 @@ class CellModuleTest < MiniTest::Spec
 
       it "execute the block in controller describe" do
         @controller.bassist = true
-        assert_is_a BassistCell,  Cell::Rails.cell_for(:musician, @controller)
+        assert_is_a BassistCell,  Cell::Rails.cell_for(:musician)
       end
 
       it "limit the builder to the receiving class" do
-        assert_is_a PianistCell,   Cell::Rails.cell_for(:pianist, @controller)   # don't inherit anything.
+        assert_is_a PianistCell,   Cell::Rails.cell_for(:pianist)   # don't inherit anything.
         @controller.bassist = true
-        assert_is_a BassistCell,   Cell::Rails.cell_for(:musician, @controller)
+        assert_is_a BassistCell,   Cell::Rails.cell_for(:musician)
       end
 
       it "chain build blocks and execute them by ORing them in the same order" do
@@ -113,13 +113,13 @@ class CellModuleTest < MiniTest::Spec
           UnknownCell # it never be executed.
         end
 
-        assert_is_a PianistCell, Cell::Rails.cell_for(:musician, @controller)  # bassist is false.
+        assert_is_a PianistCell, Cell::Rails.cell_for(:musician)  # bassist is false.
         @controller.bassist = true
-        assert_is_a BassistCell, Cell::Rails.cell_for(:musician, @controller)
+        assert_is_a BassistCell, Cell::Rails.cell_for(:musician)
       end
 
       it "use the original cell if no builder matches" do
-        assert_is_a MusicianCell, Cell::Rails.cell_for(:musician, @controller)  # bassist is false.
+        assert_is_a MusicianCell, Cell::Rails.cell_for(:musician)  # bassist is false.
       end
 
       it "stop at the first builder returning a valid cell" do
@@ -130,12 +130,12 @@ class CellModuleTest < MiniTest::Spec
         BassistCell.build do |opts|
           SingerCell if opts[:sing_the_song]
         end
-        assert_kind_of BassistCell, Cell::Rails.cell_for(:bassist, @controller, {})
-        assert_kind_of SingerCell,  Cell::Rails.cell_for(:bassist, @controller, {:sing_the_song => true})
+        assert_kind_of BassistCell, Cell::Rails.cell_for(:bassist, {})
+        assert_kind_of SingerCell,  Cell::Rails.cell_for(:bassist, {:sing_the_song => true})
       end
 
       it "create the original target class if no block matches" do
-        assert_kind_of PianistCell, Cell::Rails.cell_for(:pianist, @controller)
+        assert_kind_of PianistCell, Cell::Rails.cell_for(:pianist)
       end
 
       it "builders it return an empty array per default" do
